@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>简易计算</title>
+
+    <style>
+        *,
+        input {
+            margin-top: 5px !important;
+            margin-bottom: 5px !important;
+        }
+
+    </style>
+
+</head>
+
+<body>
+    <div id="app" class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <input class="form-control " type="text" v-model="n1">
+            </div>
+            <div class="col-md-2">
+                <select class="form-control" v-model="opt">
+                    <option value="+">+</option>
+                    <option value="-">-</option>
+                    <option value="*">×</option>
+                    <option value="/">÷</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <input class="form-control" type="text" v-model="n2">
+            </div>
+            <div class="col-md-1">
+                <input class="btn btn-success" type="button" value="=" @click="calc">
+            </div>
+            <div class="col-md-3">
+                <input class="form-control" type="text" v-model="result">
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
+
+<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- vue cdn -->
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<script>
+    // 在VM实例中，如果想要获取data上的数据，或调用methods中的方法，必须通过this.属性名 或 this.方法名 来进行访问，this代表new的VM对象
+    let vm = new Vue({
+        el: '#app',
+        data: {
+            n1: 0,
+            n2: 0,
+            result: 0,
+            opt: '+',
+        },
+        methods: {
+            calc() {
+
+                /*
+                switch(this.opt){
+                    case '+':
+                        this.result = parseInt(this.n1) + parseInt(this.n2);
+                        break;
+                    case '-':
+                        this.result = parseInt(this.n1) - parseInt(this.n2);
+                        break;
+                    case '*':
+                        this.result = parseInt(this.n1) * parseInt(this.n2);
+                        break;
+                    case '/':
+                        this.result = parseInt(this.n1) / parseInt(this.n2);
+                        break;
+                }
+                */
+                // eval() 函数可计算某个字符串,并执行其中的的 JavaScript 代码，开发中尽量避免使用；当用户上传恶意代码的字符串，该函数解析执行后会有安全问题
+                let code = 'parseInt(this.n1)'+ this.opt + 'parseInt(this.n2)';
+                this.result = eval(code);
+            }
+        },
+    });
+</script>

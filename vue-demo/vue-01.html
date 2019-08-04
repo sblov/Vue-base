@@ -1,41 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Vue-01</title>
 
-    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <!-- vue cdn -->
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-
     <style>
-        [v-cloak]{
+        [v-cloak] {
             display: none;
+        }
+
+        *,
+        input {
+            margin-bottom: 5px !important;
+        }
+
+        .inner {
+            height: 100px;
+            background-color: aquamarine;
         }
     </style>
 </head>
+
 <body>
     <!-- V(View) -->
     <div id="app" class="container">
-        <h3 class="text text-info">{{msg}}</h3>
-        
-        <h4 v-cloak  class="text-success">{{msg}}</h4>
+        <div class="alert alert-success">
+            <h3>v-cloak</h3>
+        </div>
+        <div class="well">
+            <h3 v-cloak class="text text-info">{{msg}}</h3>
+            <h4 v-cloak class="text-success">{{msg}}</h4>
+        </div>
+        <div class="alert alert-success">
+            <h3>v-text, v-html</h3>
+        </div>
+        <div class="well">
+            <h4 v-text="msg"></h4>
+            <div v-html="msg1"></div>
+        </div>
+        <div class="alert alert-success">
+            <h3>v-bind</h3>
+        </div>
+        <div class="well">
+            <input type="button" class="btn btn-danger" v-bind:value="msg2" :title="msg2 + ' test value'">
+
+            <input type="text" class="form-control" :value="navigator.userAgent">
+        </div>
+        <div class="alert alert-success">
+            <h3>v-on</h3>
+        </div>
+        <div class="well">
+            <input type="button" class="btn btn-info" value="v-on:click" @click="show">
+            <hr>
+            <!-- .stop 阻止冒泡 -->
+            <div class="inner" @click="divHandler">
+
+                <input type="button" class="btn btn-warning" value="button" @click.stop="btnHandler">
+
+            </div>
+            <!--  -->
+
+            <hr>
+            <!-- .prevent 阻止默认行为 -->
+            <a href="http://www.baidu.com" class="btn btn-link" @click.prevent="linkClick">baidu Link</a>
+
+            <!-- .capture  实现捕获触发事件的机制，先触发外部的相同事件-->
+            <div class="inner" @click.capture="divHandler">
+
+                <input type="button" class="btn btn-warning" value="button" @click="btnHandler">
+
+            </div>
+            <!-- .self 只有点击当前元素，才能触发事件处理函数 -->
+            <div class="inner" @click.self="divHandler">
+
+                <input type="button" class="btn btn-warning" value="button" @click="btnHandler">
+
+            </div>
+
+            <!-- .once 只触发一次事件处理函数 -->
+            <a href="http://www.baidu.com" class="btn btn-link" @click.prevent.once="linkClick">baidu Link</a>
+        </div>
+
+        <div class="alert alert-success">
+            <h3>v-model</h3>
+        </div>
+        <div class="well">
+            <h4>{{msg}}</h4>
+            <!-- v-model 可以实现 表单元素和Model中数据的双向数据绑定 -->
+            <!-- v-model 只能应用在 表单元素中 -->
+            <input type="text" class="form-control" v-model="msg">
+        </div>
+        <div class="alert alert-success">
+            <h3>样式使用</h3>
+        </div>
+        <div class="well">
+            <h4 :class="['label','label-info']">class test</h4>
+            <h4 :class="['label',isInfo?'label-info':'label-warning']">class test</h4>
+            <h4 :class="['label',{'label-danger':!isInfo}]">class test</h4>
+            <h4 :class="{ 'label': true, 'label-primary': true}">class test</h4>
+            <h4 :class="classObj">class test</h4>
+
+            <h3 :style="{'color': 'red' ,'font-size': '15px'}">style test</h3>
+            <h3 :style="styleObj">style test</h3>
+            <h3 :style="[styleObj,styleObj1]">style test</h3>
+        </div>
+
+        <div class="alert alert-success">
+            <h3>v-for</h3>
+        </div>
+        <div class="well">
+        </div>
     </div>
-    
+
 </body>
+
 </html>
 
+<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- vue cdn -->
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script>
     // VM
     // 导入包后，浏览器内存中会有一个Vue构造器
     let vm = new Vue({
         el: '#app', // 表示当前new的Vue实例，控制的页面区域
         data: { // data属性中，存放的是el中用到的数据 ; M(Model)
-            msg: 'Welcome to vue!' // 通过Vue指令，将数据渲染到页面
-        }
+            msg: 'Welcome to vue!', // 通过Vue指令，将数据渲染到页面
+            msg1: '<button class="btn btn-success">Welcome to vue!</button>',
+            msg2: 'bind-title',
+            isInfo: false,
+            classObj: {
+                'label': true,
+                'label-default': true
+            },
+            styleObj: {
+                'color': 'green',
+                'font-size': '20px'
+            },
+            styleObj1: {
+                'background-color': 'skyblue'
+            },
+        },
+        methods: { // 这个methods属性中定义了当前Vue实例所有可用的方法
+            show: () => {
+                alert('v-on:click');
+            },
+            divHandler() {
+                console.log('触发inner div 点击事件');
+
+            },
+            btnHandler() {
+                console.log('触发 btn input 点击事件');
+            },
+            linkClick() {
+                console.log('触发 link a 点击事件')
+            }
+        },
     });
 </script>

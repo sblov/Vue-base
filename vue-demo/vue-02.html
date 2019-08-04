@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>走马灯效果</title>
+
+    <style>
+        *,input{
+            margin-top: 5px !important;
+            margin-bottom: 5px !important;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="app" class="container">
+        <input type="button" class="btn btn-success" value="run" @click="run">
+        <input type="button" class="btn btn-danger" value="stop" @click="stop">
+
+        <h3 v-text="msg"></h3>
+    </div>
+    
+</body>
+</html>
+
+<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- vue cdn -->
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<script>
+    // 在VM实例中，如果想要获取data上的数据，或调用methods中的方法，必须通过this.属性名 或 this.方法名 来进行访问，this代表new的VM对象
+    let vm = new Vue({
+        el: '#app',
+        data: {
+            msg: 'section one demo view ！',
+            intervalId: null
+        },
+        methods: {
+            run(){
+                // 定时id存在，直接返回，防止多个定时执行
+                if(this.intervalId != null){
+                    return;
+                }
+
+                this.intervalId = setInterval(()=>{
+                    let start = this.msg.substring(0, 1);
+                    let end = this.msg.substring(1);
+                    this.msg = end + start;
+                }, 80);
+            
+                // VM实例会监听自己的data中数据的改变，会自动同步改变值
+            },
+            stop(){
+                clearInterval(this.intervalId);
+                // 定时id置空，以便新建定时
+                this.intervalId = null;
+            }
+        },
+    });
+</script>
