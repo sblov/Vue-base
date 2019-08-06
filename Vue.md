@@ -210,7 +210,46 @@ let vm = new Vue({
               ..............
   ```
 
-  
+
+## 过滤器
+
+​	Vue允许自定义过滤器，可被用作一些常见的文本格式化。
+
+​	过滤器可以用在两个地方：mustache插值 和 v-bind表达式
+
+​	过滤器该被添加在javascript 表达式的尾部，由“管道”符指示
+
+```html
+<div class="alert alert-success">
+	<h3>过滤器</h3>
+</div>
+<div class="well">
+	<h4>{{msg1 | msgFormat('标签体') | test }}</h4>
+</div>
+```
+
+```javascript
+ // 定义一个Vue 全局的过滤器
+    Vue.filter('msgFormat',(msg, arg)=>{
+        return msg.replace(/<.*?>/g, arg);
+    })
+    Vue.filter('test',(msg)=>{
+        return msg + '======';
+    })
+
+
+// 私有过滤器, 私有与全局同名，调用私有
+ let vm = new Vue({
+     ......
+     filters: {
+            msgFormat: (msg, arg)=>{
+                return msg + '  private filters';
+            }
+        },
+    });
+```
+
+
 
 ## demo
 
@@ -218,9 +257,17 @@ let vm = new Vue({
 
 简易计算器： [./vue-demo/vue-03.html](简易计算器)
 
+## tools
 
+Vue.js devtools
 
+download： http://chromecj.com/web-development/2018-01/886/download.html
 
+detail：http://chromecj.com/utilities/2018-12/1653.html
+
+使用该插件，不能引入压缩的vue
+
+![1565095808696](img/1565095808696.png)
 
 
 

@@ -113,6 +113,13 @@
         </div>
         <div class="well">
         </div>
+        <div class="alert alert-success">
+            <h3>过滤器</h3>
+        </div>
+        <div class="well">
+                <h4>{{msg1 | msgFormat('标签体') | test }}</h4>
+        </div>
+        
     </div>
 
 </body>
@@ -125,6 +132,15 @@
 <!-- vue cdn -->
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script>
+
+    // 定义一个Vue 全局的过滤器
+    Vue.filter('msgFormat',(msg, arg)=>{
+        return msg.replace(/<.*?>/g, arg);
+    })
+    Vue.filter('test',(msg)=>{
+        return msg + '======';
+    })
+
     // VM
     // 导入包后，浏览器内存中会有一个Vue构造器
     let vm = new Vue({
@@ -159,6 +175,12 @@
             },
             linkClick() {
                 console.log('触发 link a 点击事件')
+            }
+        },
+        // 私有过滤器
+        filters: {
+            msgFormat: (msg, arg)=>{
+                return msg + '  private filters';
             }
         },
     });

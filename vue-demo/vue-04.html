@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>列表案例</title>
+</head>
+
+<body>
+    <div id="app" class="container">
+
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h3 class="panel-title">List Demo</h3>
+            </div>
+            <div class="panel-body form-inline">
+                <label for="">id:</label>
+                <input type="text" class="form-control" v-model="id">
+                <label for="">name:</label>
+                <input type="text" class="form-control" v-model="name">
+
+                <input type="button" class="btn btn-success" value="add" @click="add">
+                <input type="text" class="form-control" v-model="keywords">
+                
+            </div>
+        </div>
+        
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Time</th>
+                    <th>Operation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 循环方法返回的数据 ， 而不是list静态数据-->
+                <tr v-for="item in search(keywords)" :key="item.id">
+                    <td>{{item.id}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.time | dateFormat}}</td>
+                    <td><a class="btn btn-link" @click.prevent="remove(item.id)">remove</a></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</body>
+
+</html>
+<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <script>
+
+        Vue.filter('dateFormat', (dateStr, pattern='')=>{
+            let dt = new Date(dateStr);
+
+            let y = dt.getFullYear();
+            // String.prototype.padStart(maxLen, fillStr)
+            let m = (dt.getMonth() + 1).toString().padStart(2, '0');
+            let d = dt.getDate().toString().padStart(2, '0');
+
+            if(pattern.toLowerCase() == 'yyyy-mm-dd'){
+                return `${y}-${m}-${d}`;
+            }else{
+                let hh = dt.getHours().toString().padStart(2, '0');
+                let mm = dt.getMinutes().toString().padStart(2, '0');
+                let ss = dt.getSeconds().toString().padStart(2, '0');
+
+                return `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
+            }
+
+        })
+
+        var vm=new Vue({
+           el:'#app',
+           data:{
+               id: '',
+               name: '',
+               list: [
+                   { id : 1, name : 'lov-1', time : new Date()},
+                   { id : 2, name : 'lov-2', time : new Date()},
+                   { id : 3, name : 'lov-3', time : new Date()},
+               ],
+               keywords: '',
+           },
+           methods:{
+               add(){
+                    let detail = {id: this.id, name: this.name, time: new Date()};
+                    this.list.push(detail);
+
+                    this.id = this.name = '';
+               },
+               remove(id){
+                    // this.list.some((item, i)=>{
+                    //     if(item.id == id){
+                    //         this.list.splice(i, l);
+                    //         // 返回true，终止该循环
+                    //         return true;
+                    //     }
+                    // });
+
+                    let index = this.list.findIndex(item=>{
+                        if(item.id == id){
+                            return true;
+                        }
+                    })
+
+                    this.list.splice(index, 1);
+               },
+               search(keywords){
+                   let newList = [];
+                //    this.list.forEach(element => {
+                //        if(element.name.indexOf(keywords) != -1){
+                //            newList.push(element);
+                //        }
+                //    });
+                    newList = this.list.filter(item=>{
+                        // String.prototype.includes('...')
+                        if(item.name.includes(keywords)){
+                            return item;
+                        }
+                    })
+
+                   return newList;
+               }
+           }
+        });
+    </script>
