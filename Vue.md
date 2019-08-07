@@ -153,6 +153,110 @@ let vm = new Vue({
 <input type="text" class="form-control" v-model="msg">
 ```
 
+### v-for
+
+#### 基本使用
+
+```html
+		<p class="text text-success">迭代简单数组</p>
+            <ul>
+                <li v-for="(item, i) in list">
+                    index: {{i}} , value: {{item}}
+                </li>
+            </ul>
+            <p class="text text-success">迭代对象数组</p>
+            <ul>
+                <li v-for="(item, i) in list1">
+                    index: {{i}} , id: {{item.id}} , name: {{item.name}}
+                </li>
+            </ul>
+            <p class="text text-success">迭代对象key-value</p>
+            <ul>
+                <li v-for="(val, key,  i) in user">
+                    index: {{i}} , key: {{key}} , val: {{val}}
+                </li>
+            </ul>
+            <p class="text text-success">迭代数字</p>
+            <ul>
+                <li v-for="count in 10">
+                    count: {{count}}
+                </li>
+            </ul>
+```
+
+#### 与key配置使用
+
+```html
+<p class="text text-success">v-for 与 key 使用</p>
+            <div class="panel panel-success">
+
+                <div class="panel-body form-inline">
+                    <label for="">id:</label>
+                    <input type="text" class="form-control" v-model="id">
+                    <label for="">name:</label>
+                    <input type="text" class="form-control" v-model="name">
+
+                    <input type="button" class="btn btn-success" value="add" @click="add">
+
+                </div>
+                <!-- key使用时，必须使用v-bind -->
+                <!-- 在组件中，使用v-for循环时，或在一些特殊情况时，v-for有问题，必须使用key -->
+                <!-- 如： 该例，选中某一项，以push从结尾添加对象时，没问题，但使用unshift从头添加时，即选中的项错位 -->
+                <p v-for="item in list1" :key="item.id">
+
+                    <input class="" type="checkbox">{{item.id}} : {{item.name}}
+                </p>
+
+            </div>
+```
+
+```javascript
+		list: [1, 2, 3, 4, 5],
+            list1: [{
+                    id: 1,
+                    name: 'lov-1'
+                },
+                {
+                    id: 2,
+                    name: 'lov-2'
+                },
+                {
+                    id: 3,
+                    name: 'lov-3'
+                },
+            ],
+            user: {
+                id: 1,
+                name: 'lov',
+                gender: 'man'
+            },
+            id: '',
+            name: '',
+                
+       ........................
+            
+       add() {
+                // this.list1.push({id: this.id, name: this.name});
+                this.list1.unshift({id: this.id, name: this.name});
+            }
+```
+
+### v-if / v-show
+
+v-if：每次会重新删除和创建元素，有较高的切换性能消耗
+
+v-show： 与v-if不同，只是切换`display:none`样式， 有较高的初始渲染消耗
+
+```html
+<input class="btn btn-success" type="button" value="toggle" @click="flag=!flag">
+               	<h3 v-if="flag">v-if test</h3>
+                <h3 v-show="flag">v-show test</h3>
+```
+
+```javascript
+ flag: true,
+```
+
 ## 样式使用
 
 #### 使用class样式
@@ -256,6 +360,8 @@ let vm = new Vue({
 走马灯效果： [./vue-demo/vue-02.html](走马灯效果)
 
 简易计算器： [./vue-demo/vue-03.html](简易计算器)
+
+列表案例：[./vue-demo/vue-04.html](列表案例)
 
 ## tools
 

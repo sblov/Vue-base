@@ -112,14 +112,70 @@
             <h3>v-for</h3>
         </div>
         <div class="well">
+            <p class="text text-success">迭代简单数组</p>
+            <ul>
+                <li v-for="(item, i) in list">
+                    index: {{i}} , value: {{item}}
+                </li>
+            </ul>
+            <p class="text text-success">迭代对象数组</p>
+            <ul>
+                <li v-for="(item, i) in list1">
+                    index: {{i}} , id: {{item.id}} , name: {{item.name}}
+                </li>
+            </ul>
+            <p class="text text-success">迭代对象key-value</p>
+            <ul>
+                <li v-for="(val, key,  i) in user">
+                    index: {{i}} , key: {{key}} , val: {{val}}
+                </li>
+            </ul>
+            <p class="text text-success">迭代数字</p>
+            <ul>
+                <li v-for="count in 10">
+                    count: {{count}}
+                </li>
+            </ul>
+            <hr>
+            <p class="text text-success">v-for 与 key 使用</p>
+            <div class="panel panel-success">
+
+                <div class="panel-body form-inline">
+                    <label for="">id:</label>
+                    <input type="text" class="form-control" v-model="id">
+                    <label for="">name:</label>
+                    <input type="text" class="form-control" v-model="name">
+
+                    <input type="button" class="btn btn-success" value="add" @click="add">
+
+                </div>
+                <!-- key使用时，必须使用v-bind -->
+                <!-- 在组件中，使用v-for循环时，或在一些特殊情况时，v-for有问题，必须使用key -->
+                <!-- 如： 该例，选中某一项，以push从结尾添加对象时，没问题，但使用unshift从头添加时，即选中的项错位 -->
+                <p v-for="item in list1" :key="item.id">
+
+                    <input class="" type="checkbox">{{item.id}} : {{item.name}}
+                </p>
+
+            </div>
+
         </div>
+        <div class="alert alert-success">
+                <h3>v-if / v-show</h3>
+            </div>
+            <div class="well">
+                <input class="btn btn-success" type="button" value="toggle" @click="flag=!flag">
+                <h3 v-if="flag">v-if test</h3>
+                <h3 v-show="flag">v-show test</h3>
+            </div>
+    
         <div class="alert alert-success">
             <h3>过滤器</h3>
         </div>
         <div class="well">
-                <h4>{{msg1 | msgFormat('标签体') | test }}</h4>
+            <h4>{{msg1 | msgFormat('标签体') | test }}</h4>
         </div>
-        
+
     </div>
 
 </body>
@@ -132,12 +188,11 @@
 <!-- vue cdn -->
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script>
-
     // 定义一个Vue 全局的过滤器
-    Vue.filter('msgFormat',(msg, arg)=>{
+    Vue.filter('msgFormat', (msg, arg) => {
         return msg.replace(/<.*?>/g, arg);
     })
-    Vue.filter('test',(msg)=>{
+    Vue.filter('test', (msg) => {
         return msg + '======';
     })
 
@@ -161,6 +216,28 @@
             styleObj1: {
                 'background-color': 'skyblue'
             },
+            list: [1, 2, 3, 4, 5],
+            list1: [{
+                    id: 1,
+                    name: 'lov-1'
+                },
+                {
+                    id: 2,
+                    name: 'lov-2'
+                },
+                {
+                    id: 3,
+                    name: 'lov-3'
+                },
+            ],
+            user: {
+                id: 1,
+                name: 'lov',
+                gender: 'man'
+            },
+            id: '',
+            name: '',
+            flag: true,
         },
         methods: { // 这个methods属性中定义了当前Vue实例所有可用的方法
             show: () => {
@@ -175,11 +252,15 @@
             },
             linkClick() {
                 console.log('触发 link a 点击事件')
+            },
+            add() {
+                // this.list1.push({id: this.id, name: this.name});
+                this.list1.unshift({id: this.id, name: this.name});
             }
         },
         // 私有过滤器
         filters: {
-            msgFormat: (msg, arg)=>{
+            msgFormat: (msg, arg) => {
                 return msg + '  private filters';
             }
         },
