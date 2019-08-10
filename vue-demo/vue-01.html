@@ -175,6 +175,21 @@
         <div class="well">
             <h4>{{msg1 | msgFormat('标签体') | test }}</h4>
         </div>
+        <div class="alert alert-success">
+            <h3>自定义指令</h3>
+        </div>
+        <div class="well">
+            <h4>全局</h4>笔记中有
+            <hr>
+            <h4>私有</h4>
+            <h5 v-fontweight="900">自定义指令fontweight</h5>
+            <hr>
+            <h4>简写</h4>
+            <p v-color="'skyblue'">全局简写</p>
+            <p v-fontsize="30">私有简写</p>
+            
+
+        </div>
 
     </div>
 
@@ -196,6 +211,9 @@
         return msg + '======';
     })
 
+    Vue.directive('color',(el, binding)=>{
+                el.style.color = binding.value;
+            })
     // VM
     // 导入包后，浏览器内存中会有一个Vue构造器
     let vm = new Vue({
@@ -264,5 +282,15 @@
                 return msg + '  private filters';
             }
         },
+        directives:{
+            'fontweight': {
+                bind: (el, binding)=>{
+                    el.style.fontWeight = binding.value;
+                }
+            },
+            'fontsize':(el, binding)=>{ // 该方式简写定于将代码写入bind与update， 全局简写同理
+                el.style.fontSize = parseInt(binding.value)+'px';
+            }
+        }
     });
 </script>

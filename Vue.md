@@ -1,4 +1,4 @@
-# Vue
+# `Vue
 
 ## MVVM
 
@@ -353,7 +353,131 @@ v-show： 与v-if不同，只是切换`display:none`样式， 有较高的初始
     });
 ```
 
+## 按键修饰符
 
+`@keyup.xxx`
+
+```html
+<input type="text" class="form-control" v-model="name" @keyup.enter="add">
+```
+
+​	对于vue没有提供的按键，可以使用按键编码代替，如`@keyup.113`
+
+或者自定义全局按键修饰符
+
+`Vue.config.keyCodes.f2 = 113`
+
+## 自定义指令
+
+如 `v-focus` 获取焦点事件
+
+```html
+ <input type="text" class="form-control" v-model="keywords" id="search" v-focus >
+```
+
+```javascript
+// 使用 Vue.directive()定义全局的指令 v-focus
+// 参数1： 指令的名称，在定义时，指令名称前，不需要加 v- 前缀，但调用时需加v-前缀调用
+// 参数2：一个对象，里面有一些指令相关的函数，在 特定阶段会执行相应操作
+Vue.directive('focus',{
+    bind: (el)=>{ //每当指令绑定到元素上时，会执行这个bind函数，只执行一次
+    // 在每个函数中，第一个参数，永远是el， 表述被绑定指令的元素， el是一个原生的JS对象
+    // 在元素刚绑定了指令时，还没有插入到dom中，这时调用focus没有作用
+    // 一个元素，只有插入DOM后才能获取焦点
+    // el.focus();
+    },
+    inserted:(el)=>{ // inserted 表示元素插入dom中时，会执行inserted函数
+    	el.focus();
+    },
+    updated(){ // 当VNode更新时，会执行updated 
+    }
+})
+```
+
+## vue实例的生命周期
+
+ [./vue-demo/vue-05.html]()
+
+- 什么是生命周期：从Vue实例创建、运行、到销毁期间，总是伴随着各种各样的事件，这些事件，统称为生命周期！
+- [生命周期钩子](https://cn.vuejs.org/v2/api/#选项-生命周期钩子)：就是生命周期事件的别名而已；
+  - 生命周期钩子 = 生命周期函数 = 生命周期事件
+- 主要的生命周期函数分类：
+
+- 创建期间的生命周期函数：
+  - beforeCreate：实例刚在内存中被创建出来，此时，还没有初始化好 data 和 methods 属性
+  - created：实例已经在内存中创建OK，此时 data 和 methods 已经创建OK，此时还没有开始 编译模板
+  - beforeMount：此时已经完成了模板的编译，但是还没有挂载到页面中
+  - mounted：此时，已经将编译好的模板，挂载到了页面指定的容器中显示
+
+- 运行期间的生命周期函数：
+  - beforeUpdate：状态更新之前执行此函数， 此时 data 中的状态值是最新的，但是界面上显示的 数据还是旧的，因为此时还没有开始重新渲染DOM节点
+  - updated：实例更新完毕之后调用此函数，此时 data 中的状态值 和 界面上显示的数据，都已经完成了更新，界面已经被重新渲染好了！
+
+- 销毁期间的生命周期函数：
+  - beforeDestroy：实例销毁之前调用。在这一步，实例仍然完全可用。
+  - destroyed：Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。
+
+## axios(post,get)
+
+## JSONP
+
+### 原理了解
+
+​	https://blog.csdn.net/hansexploration/article/details/80314948
+
+### 实现
+
+app.js
+
+```javascript
+// 导入 http 内置模块
+const http = require('http')
+// 这个核心模块，能够帮我们解析 URL地址，从而拿到  pathname  query 
+const urlModule = require('url')
+
+// 创建一个 http 服务器
+const server = http.createServer()
+// 监听 http 服务器的 request 请求
+server.on('request', function (req, res) {
+
+  // const url = req.url
+  const { pathname: url, query } = urlModule.parse(req.url, true)
+
+  if (url === '/getscript') {
+    // 拼接一个合法的JS脚本，这里拼接的是一个方法的调用
+    // var scriptStr = 'show()'
+
+    var data = {
+      name: 'lov',
+      age: 18,
+      gender: 'man'
+    }
+
+    var scriptStr = `${query.callback}(${JSON.stringify(data)})`
+    // res.end 发送给 客户端， 客户端去把 这个 字符串，当作JS代码去解析执行
+    res.end(scriptStr)
+  } else {
+    res.end('404')
+  }
+})
+
+// 指定端口号并启动服务器监听
+server.listen(3000, function () {
+  console.log('server listen at http://127.0.0.1:3000')
+})
+```
+
+json.html
+
+```html
+<script>
+    function showInfo(data){
+        console.log(data);
+    }
+</script>
+
+<script src="http://127.0.0.1:3000/getscript?callback=showInfo"></script>
+```
 
 ## demo
 

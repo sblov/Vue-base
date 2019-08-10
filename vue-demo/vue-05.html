@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue生命周期-console</title>
+</head>
+
+<body>
+    <div id="app" class="container">
+        <h5 id="test">{{ msg }}</h5>
+        <input type="button" value="update msg" class="btn btn-warning" @click="msg='changed'">
+    </div>
+</body>
+
+</html>
+<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        var vm=new Vue({
+           el:'#app',
+           data:{
+               msg: 'lifecircle',
+           },
+           methods:{
+               show(){
+                   console.log(this.msg);
+               }
+           },
+           beforeCreate() {// 第一个生命周期，实例完全被创建之前执行
+                // 在该函数执行时，data与methods还未初始化
+                console.log('beforeCreate： 未初始化data -->'+ this.msg)
+           },
+           created() {
+                console.log('created: data与methods已初始化 -->'+ this.msg)
+           },
+           beforeMount() {
+               
+                console.log('beforeMount: 内存中的模板还未加载到页面 -->' + $('#test').text());
+           },
+           mounted() {
+                console.log('mounted: 实例已完全创建 -->' + $('#test').text());
+           },
+           beforeUpdate() {
+                console.log('beforeUpdate: 属性更新前 -->' + $('#test').text());
+           },
+           updated() {
+                console.log('updated: 属性更新后 -->' + $('#test').text());
+           },
+           beforeDestroy() {
+                console.log('beforeDestroy: 进入销毁函数 -->' + this.msg);
+           },
+           destroyed() {
+                console.log('destroyed: Vue实例完全销毁 -->' + this.msg);
+           },
+        });
+
+        // vm.$destroy();
+    </script>
