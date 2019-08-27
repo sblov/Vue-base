@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+        type="text/css">
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
+
+    </link>
+    <style>
+        /* transition标签中的有name属性时，v替换为属性值，否则默认为v */
+        /* v-enter 是进入动画前，元素起始状态 */
+        /* v-leave-to 是动画离开后，离开的终止状态，此时动画已结束 */
+        .fade-enter,
+        .fade-leave-to {
+            opacity: 0;
+        }
+
+        /* v-enter-active 入场动画时间段 */
+        /* v-leave-active 离场动画时间段*/
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity .5s;
+        }
+
+        .ball {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: red;
+        }
+
+        li {
+            border: 1px dashed #999;
+            margin: 5px;
+            line-height: 35px;
+            padding-left: 5px;
+            font-size: 12px;
+            width: 100%;
+        }
+        li:hover{
+            background: pink;
+        }
+
+        .list-enter,
+        .list-leave-to {
+            opacity: 0;
+            transform: translateY(80px);
+        }
+
+        .list-enter-active,
+        .list-leave-active {
+            transition: all 0.6s ease;
+        }
+
+        .list-move{
+            transition: all 0.6s ease;
+        }
+        .list-leave-active {
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body class="container">
+    <div id="app">
+        <input type="button" value="toggle" @click="flag=!flag">
+        <!-- 使用transition元素，将需要被动画控制的元素，包裹起来 -->
+        <!-- transition元素由Vue官方提供 -->
+        <transition name="fade">
+            <h3 v-if="flag">this is a H3</h3>
+        </transition>
+
+        <hr>
+
+        <input type="button" value="第三方库" @click="flag1=!flag1">
+        <!-- :duration 指定过渡持续时间 -->
+        <transition enter-active-class="animated bounceIn" leave-active-class="animated bounceOutRight"
+            :duration="{ enter: 500, leave: 800 }">
+            <h3 v-if="flag1">this is a H3</h3>
+        </transition>
+        <hr>
+        <input type="button" value="半场动画" @click="flag2=!flag2">
+        <transition @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
+            <div class="ball" v-show="flag2"></div>
+        </transition>
+        <hr>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">列表动画</h3>
+            </div>
+            <div class="panel-body form-inline">
+                <label for="">id:</label>
+                <input type="text" class="form-control" v-model="id">
+                <label for="">name:</label>
+                <input type="text" class="form-control" v-model="name" @keyup.enter="add">
+
+                <input type="button" class="btn btn-success" value="add" @click="add">
+            </div>
+        </div>
+
+        <!-- <ul> -->
+            <!-- 通过v-for渲染的元素，需要用transitionGroup -->
+            <!-- appear属性，显示页面刚加载的入场效果 -->
+            <!-- tag属性，指定该标签默认页面渲染的标签元素 -->
+            <transition-group name="list" appear tag="ul">
+                <li v-for="(item, i) in list" :key="item.id" @click="del(i)">
+                    {{item.id}} ---- {{item.name}}
+                </li>
+            </transition-group>
+
+        <!-- </ul> -->
+
+    </div>
+</body>
+
+</html>
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            flag: false,
+            flag1: false,
+            flag2: false,
+            list: [{
+                    id: 1,
+                    name: 'aaa'
+                },
+                {
+                    id: 2,
+                    name: 'bbb'
+                },
+                {
+                    id: 3,
+                    name: 'ccc'
+                },
+            ],
+            id: '',
+            name: '',
+        },
+        methods: {
+            // el: 执行动画的都dom元素
+            beforeEnter(el) {
+                // 设置起始位置
+                el.style.transform = "translate(0, 0)";
+            },
+            enter(el, done) {
+
+                // 强制动画刷新，否则不会有动画效果
+                el.offsetWidth;
+                // 设置动画样式
+                el.style.transform = "translate(150px, 450px)";
+                el.style.transition = "all 0.5s ease";
+
+                // 必须调用done
+                done();
+            },
+            afterEnter(el) {
+                this.flag2 = !this.flag2
+            },
+            add() {
+                this.list.push({
+                    id: this.id,
+                    name: this.name
+                });
+            },
+            del(i){
+                this.list.splice(i, 1);
+            }
+        }
+    });
+</script>

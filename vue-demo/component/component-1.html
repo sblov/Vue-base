@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>组件定义</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+        type="text/css">
+    </link>
+</head>
+
+<body class="container">
+    <div id="app" style="background: powderblue">
+        <com1></com1>
+        <com2></com2>
+        <com3></com3>
+        <login></login>
+    </div>
+    <div id="app1">
+        <com3></com3>
+        <login></login>
+    </div>
+
+    <template id="tmp1">
+        <div>
+            <h1>template元素定义</h1>
+            <h4>{{msg}}</h4>
+        </div>
+    </template>
+    <template id="tmp2">
+        <div>
+            <h3>私有login组件</h3>
+        </div>
+    </template>
+</body>
+
+</html>
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+    // 1、使用Vue.extend 创建全局的Vue组件
+    // let com1 = Vue.extend({
+    // template： 指定组件展示结构, 只能由一个根标签
+    // template: '<h3>Vue.extend 创建的组件</h3>'
+    // })
+
+    // 2、注册组件
+    // Vue.component('myCom1', com1);
+    Vue.component('com1', Vue.extend({
+        template: '<h3>Vue.extend 创建的组件</h3>'
+    }));
+    Vue.component('com2', {
+        template: '<h3>Vue.component 创建的组件</h3>'
+    });
+    Vue.component('com3', {
+        template: '#tmp1',
+        // 组件中的data时一个方法，且必须有返回值
+        data:function(){
+            // 如果此处返回的是外部定义的对象，则每个组件实例中，得到的对象都是同一个对象
+            return{
+                msg: '组件中定义的data数据'
+            }
+        }
+    });
+
+    let vm = new Vue({
+        el: '#app',
+        data: {},
+        methods: {},
+        //    定义实例内部私有组件的
+        components: {
+            login: {
+                template: '#tmp2'
+            }
+        }
+    });
+
+    let vm1 = new Vue({
+        el: '#app1',
+        data: {},
+        methods: {}
+    });
+</script>

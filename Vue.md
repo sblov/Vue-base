@@ -417,7 +417,21 @@ Vue.directive('focus',{
   - beforeDestroy：实例销毁之前调用。在这一步，实例仍然完全可用。
   - destroyed：Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。
 
-## axios(post,get)
+## axios(post,get) 
+
+## vue-resource
+
+<script src="https://cdn.bootcss.com/vue-resource/1.5.1/vue-resource.js"></script>
+```javascript
+ // 全局配置访问路径
+ Vue.http.options.root = 'http://www.wangshuwen.com/';
+
+ // 配置跟路径时，路径为相对路径，不能加‘/’
+ this.$http.get('api/getRegion').then(result=>{
+                    ........
+```
+
+
 
 ## JSONP
 
@@ -478,6 +492,10 @@ json.html
 
 <script src="http://127.0.0.1:3000/getscript?callback=showInfo"></script>
 ```
+
+## 动画
+
+ [./vue-demo/animation.html]()
 
 ## demo
 

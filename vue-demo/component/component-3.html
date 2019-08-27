@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>父子组件</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css"></link>
+</head>
+
+<body class="container">
+    <div id="app">
+        <!-- 通过v-bind传递data，将父组件的msg绑定到子组件的parentmsg上 -->
+        <com1 :parentmsg='msg'></com1>
+        <!-- 通过v-on传递事件 -->
+        <com2 @func='show'></com2>
+    </div>
+</body>
+
+<template id="com2">
+    <div>
+        <h3>子组件</h3>
+        <input type="button" value="方法传递" @click='myclick'>
+    </div>
+</template>
+
+</html>
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+
+    let com2 = {
+                template: '#com2',
+                data(){
+                    return {
+                        name : 'lov'
+                    }
+                },
+                methods: {
+                    myclick(){
+                        // 触发传入绑定的方法
+                        this.$emit('func', 'detail '+ this.name);
+                    }
+                },
+           }
+
+    let vm=new Vue({
+       el:'#app',
+       data:{
+           msg: '123',
+       },
+       methods:{
+           show(i){
+               console.log('父组件的show() --------' + i);
+           }
+       },
+       components: {
+        //    子组件默认无法访问父组件的data与methods
+           com1: {
+               template: '<h3>子组件 ---- {{parentmsg}}</h3>',
+            //    属性绑定定义， props中的数据都是由父组件绑定到子组件的， 数据为只读
+               props: ['parentmsg'],
+
+           },
+           com2:com2,
+       }
+    });
+</script>

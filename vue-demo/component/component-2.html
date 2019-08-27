@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>组件切换</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+        type="text/css">
+    </link>
+    <style>
+        .com.enter,.com-leave-to{
+            opacity: 0;
+            transform: translateY(80px);
+        }
+        .com-enter-active,.com-leave-active{
+            transition: all 0.5s ease;
+        }
+    </style>
+</head>
+
+<body class="container">
+    <div id="app">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">if-else实现组件切换</h3>
+            </div>
+            <div class="panel-body">
+                <a href="" @click.prevent="flag=true">login</a>
+                <a href="" @click.prevent="flag=false">register</a>
+
+                <login v-if="flag"></login>
+                <register v-else="flag"></register>
+            </div>
+        </div>
+        <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">component标签实现</h3>
+                </div>
+                <div class="panel-body">
+                    <a href="" @click.prevent="comName='login'">login</a>
+                    <a href="" @click.prevent="comName='register'">register</a>
+                    <!-- component是一个占位符， :is属性指定展示的组件名称 -->
+                    <!-- mdoe属性设置组件切换模式 -->
+                    <transition name="com" mode="out-in">
+                        <component :is="comName"></component>
+                    </transition>
+                </div>
+            </div>
+
+    </div>
+</body>
+
+</html>
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+    Vue.component('login', {
+        template: '<h2>login component</h2>'
+    })
+    Vue.component('register', {
+        template: '<h2>register component</h2>'
+    })
+
+
+    let vm = new Vue({
+        el: '#app',
+        data: {
+            flag: true,
+            comName: 'login',
+        },
+        methods: {
+
+        }
+    });
+</script>

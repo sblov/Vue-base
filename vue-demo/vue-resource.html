@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue_resource</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="app" class="container">
+
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">resource list</h3>
+            </div>
+            <div class="panel-body form-inline">
+                <label for="">id:</label>
+                <input type="text" class="form-control" v-model="id">
+                <label for="">name:</label>
+                <input type="text" class="form-control" v-model="name" >
+
+                <input type="button" class="btn btn-success" value="add" @click='add' >
+                <input type="text" class="form-control" id="search">
+            </div>
+        </div>
+
+
+
+
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>NAME</th>
+                    <th>OPERATION</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in list" :key="item.id">
+                    <td>{{item.id}}</td>
+                    <td>{{item.name}}</td>
+                    <td>
+                        <a href="#">remove</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+
+</body>
+
+</html>
+
+
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- vue cdn -->
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://cdn.bootcss.com/vue-resource/1.5.1/vue-resource.js"></script>
+
+<script>
+
+    // 全局配置访问路径
+    Vue.http.options.root = 'http://www.wangshuwen.com/';
+
+    let vm = new Vue({
+        el: '#app',
+        data: {
+            list: [],
+            id: '',
+            name: '',
+        },
+        methods: {
+            add(){},
+            getAllList(){
+                // 配置跟路径时，路径为相对路径，不能加‘/’
+                this.$http.get('api/getRegion').then(result=>{
+                    if (result.ok) {
+                        
+                        result.body.data.forEach(element => {
+                            this.list.push({id: element.id, name: element.name})
+                        });
+                    }else{
+                        alert('error')
+                    }
+                });
+            }
+        },
+        created() {
+            this.getAllList();
+        },
+    });
+</script>

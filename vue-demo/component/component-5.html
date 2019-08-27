@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>$refs获取元素</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css"></link>
+</head>
+
+<body class="container">
+    <div id="app">
+        <input type="button" value="getElement" @click='getElement'>
+        <h3 id="myh3" ref="myh3">h3 element ------------</h3>
+
+        <login ref='login'></login>
+    </div>
+
+    <template id="login">
+        <div>
+            <h3>login</h3>
+        </div>
+    </template>
+</body>
+
+</html>
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+    let login = {
+        template: '#login',
+        data(){
+            return {
+                a:1,b:2
+            }
+        },
+        methods:{
+            log(){
+                console.log('login component');
+            }
+        }
+    }
+
+    let vm=new Vue({
+       el:'#app',
+       data:{},
+       methods:{
+           getElement(){
+            //    获取原生元素
+               console.log(this.$refs.myh3.innerText);
+
+                // 直接获取组件中的属性方法
+               console.log(this.$refs.login.a);
+               this.$refs.login.log();
+           }
+       },
+       components:{
+           login: login,
+       }
+    });
+</script>
