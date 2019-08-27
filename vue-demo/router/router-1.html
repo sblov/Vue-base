@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>router基本使用</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    </link>
+    <style>
+        .v-enter,
+        .v-leave-to {
+            opacity: 0;
+            transform: translateY(80px);
+        }
+
+        .v-enter-active,
+        .v-leave-active {
+            transition: all 0.6s ease;
+        }
+    </style>
+</head>
+
+<body class="container">
+
+    <div id="app">
+
+        <!-- <a href="#/login">login</a>
+        <a href="#/register">register</a> -->
+
+        <!-- query参数传递 -->
+        <router-link to='/login?id=10' tag='span'>login</router-link>
+        <!-- <router-link to='/register' tag='span'>register</router-link> -->
+        <!-- params参数传递 -->
+        <router-link to='/register/10' tag='span'>register</router-link>
+
+        <!-- vue-router 提供元素， 作为占位符，当路由规则匹配到组件，展示在该占位符中 -->
+        <transition mode="out-in">
+            <router-view></router-view>
+        </transition>
+    </div>
+</body>
+
+</html>
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://cdn.bootcss.com/vue-router/3.1.2/vue-router.js"></script>
+<script>
+    let login = {
+        // 参数获取
+        template: '<h3>login component --- {{$route.query.id}}</h3>',
+        created() { // 组件的生命周期函数钩子
+            console.log(this.$route);
+
+        },
+    
+    }
+    let register = {
+        template: '<h3>register component --- {{$route.params.id}}</h3>'
+    }
+    // 创建路由对象
+    let routerObj = new VueRouter({
+        // route 路由规则匹配
+        routes: [
+            // 每个路由规则都是一个对象，有两个必须的属性：
+            // 1、path 监听的路由链接地址
+            // 2、component 展示匹配的组件 ,必须是一个组件的模板对象
+            {
+                path: '/',
+                redirect: '/login'
+            },
+            {
+                path: '/login',
+                component: login
+            },
+            {
+                path: '/register/:id',
+                component: register
+            }
+        ],
+        // 设置激活的按钮样式，还可以直接修改相对应的默认属性类
+        linkActiveClass: 'btn btn-success'
+    })
+
+    let vm = new Vue({
+        el: '#app',
+        data: {},
+        methods: {},
+        //    注册路由规则对象
+        router: routerObj
+    });
+</script>
