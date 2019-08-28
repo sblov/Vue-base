@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>watch</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+        type="text/css">
+    </link>
+</head>
+
+<body class="container">
+    <div id="app">
+        <input type="text" v-model="fn">
+        +
+        <input type="text" v-model="sn">
+        =
+        <input type="text" disabled v-model="name">
+        <hr>
+        <router-link to='/login'>login</router-link>
+        <router-link to='/register'>register</router-link>
+        <router-view></router-view>
+    </div>
+</body>
+
+</html>
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://cdn.bootcss.com/vue-router/3.1.2/vue-router.js"></script>
+<script>
+    let login = {
+        template: '<h3>login component </h3>',
+    }
+    let register = {
+        template: '<h3>register component</h3>'
+    }
+
+    let router = new VueRouter({
+        routes: [{
+                path: '/',
+                redirect: '/login'
+            },
+            {
+                path: '/login',
+                component: login
+            },
+            {
+                path: '/register',
+                component: register
+            }
+        ],
+        linkActiveClass: 'btn btn-success'
+    })
+
+
+
+    let vm = new Vue({
+        el: '#app',
+        data: {
+            fn: '',
+            sn: '',
+            name: '',
+        },
+        methods: {},
+        //    该属性监控data中指定数据的变化，然后触发watch中对应的function
+        // watch对于具体的dom来说，比v-on的方式麻烦，但是对于组件这种不是具体的东西，watch监听更方便
+        watch: {
+            'fn': function (newVal, odlVal) {
+                console.log(newVal + '------' + odlVal);
+                this.name = this.fn + this.sn;
+            },
+            //    路由路径
+            '$route.path': function (newVal, odlVal) {
+                console.log(newVal + '------' + odlVal);
+            }
+        },
+    });
+</script>

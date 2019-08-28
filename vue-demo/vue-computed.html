@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+        type="text/css">
+    </link>
+</head>
+
+<body class="container">
+    <div id="app">
+        <input type="text" v-model="fn">
+        +
+        <input type="text" v-model="sn">
+        =
+        <input type="text" v-model="name">
+
+    </div>
+</body>
+
+</html>
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+    let vm = new Vue({
+        el: '#app',
+        data: {
+            fn: '',
+            sn: '',
+        },
+        methods: {},
+        // computed 中都是计算属性，本质是一个方法，使用时直接当属性使用
+        // 只要计算属性内部所用的data数据发生变化，就会重新计算该属性
+        computed: {
+            // 该计算属性不能在data中定义
+            'name': function(){
+                return this.fn+this.sn;
+            }
+        },
+    });
+</script>

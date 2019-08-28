@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>路由嵌套</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+        type="text/css">
+    </link>
+</head>
+
+<body class="container">
+    <div id="app">
+        <router-link to="/account">Account</router-link>
+
+        <router-view></router-view>
+
+    </div>
+</body>
+<template id="tmp1">
+    <div>
+        <h3>this is a account component !</h3>
+        <router-link to='/account/login'>login</router-link>
+        <router-link to='/account/register'>register</router-link>
+        <!-- 嵌套路由 -->
+        <router-view></router-view>
+    </div>
+</template>
+
+</html>
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://cdn.bootcss.com/vue-router/3.1.2/vue-router.js"></script>
+<script>
+    // 模板对象
+    let account = {
+        template: '#tmp1',
+    };
+    let login = {
+        template: '<h2>login</h2>',
+    };
+    let register = {
+        template: '<h2>register</h2>',
+    };
+
+    let router = new VueRouter({
+        routes: [{
+            path: '/account',
+            component: account,
+            children: [
+                {path: 'login', component: login},
+                {path: 'register', component: register},
+            ]
+        }, ]
+    })
+
+    let vm = new Vue({
+        el: '#app',
+        data: {},
+        methods: {},
+        router
+    });
+</script>

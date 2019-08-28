@@ -35,8 +35,9 @@
         <!-- params参数传递 -->
         <router-link to='/register/10' tag='span'>register</router-link>
 
-        <!-- vue-router 提供元素， 作为占位符，当路由规则匹配到组件，展示在该占位符中 -->
+        <!-- 动画切换 -->
         <transition mode="out-in">
+            <!-- vue-router 提供元素， 作为占位符，当路由规则匹配到组件，展示在该占位符中 -->
             <router-view></router-view>
         </transition>
     </div>
