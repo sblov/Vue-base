@@ -1,0 +1,12 @@
+li{
+    padding: 10px;
+    border: solid 1px #000000;
+}
+
+#header{
+    width: 220px;
+    height: 120px;
+    /* 默认情况，webpack不能处理css中的url地址，不管是图片还是字体库 ,需要url-loader*/
+    background: url('../images/wlop.jpg');
+    background-size: cover
+}
