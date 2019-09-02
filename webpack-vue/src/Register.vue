@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h4>Login Component -----</h4>
+        <h4>Register Component -----</h4>
     </div>
 </template>
 <script>
